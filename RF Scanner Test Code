@@ -45,7 +45,7 @@ FT_Sig_1D(1) = [];
 end
 
                       
-for ch_ind = 1:16
+for ch_ind = 1:Ch_Num
 TestBuf(:,ch_ind) = FT_Sig_1D_Half(:,ch_ind)>DecTh;                            
 end
 
@@ -55,6 +55,6 @@ if Detection >= 1
 disp('Signal Detected')
 end
 
-for ch_ind = 1:16
+for ch_ind = 1:Ch_Num
 end 
 
