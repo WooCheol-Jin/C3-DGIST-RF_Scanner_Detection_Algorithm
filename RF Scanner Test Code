@@ -56,10 +56,6 @@ disp('Signal Detected')
 end
 
 for ch_ind = 1:Ch_Num
-Ref_Ch = FT_Sig_1D;
-
-end 
-
 
 FreqAnt1 = fft(SelAnt1);
 FreqAnt2=fft(SelAnt2);
@@ -106,5 +102,10 @@ figure(200); title('Averaged Angle of Frame')
 hold on; plot(FrameIdx, MeanAngle, 'ro'); axis([0 FrameEnd+1 -180 180]);
 
 end
+
+
+end 
+
+
                     
                     
