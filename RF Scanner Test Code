@@ -1,5 +1,3 @@
-
-
 Path = pwd;
 
 for ch_ind = 1:Ch_Num
