@@ -35,11 +35,8 @@ end
 pause(P_time)                        
 end
 
-                      
-
-
-
-                        for ch_ind = 1:Ch_Num
+                                         
+for ch_ind = 1:Ch_Num
                             Sam = Sam_Num*(Ram_FFT-1)+1:Sam_Num*Ram_FFT;
                             Data_RS_1D = DataBuff(Sam,ch_ind);
                             Data_RS_Sel_1D = Data_RS_1D(21:end);
