@@ -52,9 +52,12 @@ FT_Sig_1D(1) = [];
 FT_Sig_1D_Half(:,ch_ind) = FT_Sig_1D(1:floor(length(FT_Sig_1D)/2));
                            
 end
-                            Freq = (1:length(Data_RS_Sel_1D))/length(Data_RS_Sel_1D)*20e6;
-                            Freq(1) = [];
-                            Freq_Half = Freq(1:floor(length(Freq)/2))';
+                           
+Freq = (1:length(Data_RS_Sel_1D))/length(Data_RS_Sel_1D)*20e6;
+                        
+Freq(1) = [];
+                        
+Freq_Half = Freq(1:floor(length(Freq)/2))';
                             figure
                             for ch_ind =1:Ch_Num
                                 subplot(4,4,ch_ind)
