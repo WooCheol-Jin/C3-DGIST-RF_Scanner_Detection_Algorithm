@@ -56,6 +56,8 @@ disp('Signal Detected')
 end
 
 for ch_ind = 1:(Ch_Num-1)
+SelAnt1 = DataBuff(:,ch_ind)
+SelAnt2 = DataBuff(:,ch_ind+1)
 
 FreqAnt1 = fft(SelAnt1);
 FreqAnt2=fft(SelAnt2);
