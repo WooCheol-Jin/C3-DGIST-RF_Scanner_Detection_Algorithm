@@ -32,10 +32,8 @@ xlabel('Sample')
                                    
 ylabel('Amplitude')
                                   
-title(['Raw data CH ' num2str(ch_ind + 8*i)])
-                                   
-set(gca,'FontSize',15)
-                                
+title(['Raw data CH ' num2str(ch_ind + 8*i)])                                   
+set(gca,'FontSize',15)                                
 end
 
 pause(P_time)                        
