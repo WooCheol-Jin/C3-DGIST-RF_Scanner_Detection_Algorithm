@@ -62,22 +62,7 @@ end
 
 
 
-        % Value changed function: RunButton
-        function RunButtonValueChanged(app, event)
-            value = app.RunButton.Value;
-            
-            
-            
-            % Variable Initialization
-            FrameStart=app.FrameStartIdxEditField.Value;
-            FrameEnd=app.FrameEndIdxEditField.Value;
-            DetTH=app.DetTHEditField.Value;
-            
-            Indi_ResultOn=app.IndividualFrameResultCheckBox.Value;
-            
-            Avg_ResultOn=app.AveragedFrameResultCheckBox.Value;
-            
-            
+
             if app.FileSelection==0
                 
                 errordlg('File Not Selected');
