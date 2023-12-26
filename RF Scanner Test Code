@@ -1,6 +1,6 @@
 
 
-
+Path = pwd;
 
 for ch_ind = 1:Ch_Num
 filename=[ Path '\'  File_name '_SET' num2str(set_ind,'%03.f') 'CH' num2str(ch_ind,'%02.f') '.dat'];
