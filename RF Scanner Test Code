@@ -26,10 +26,8 @@ for i = 0:1
 figure                              
 for ch_ind =1:Ch_Num/2                                   
 subplot(2,4,ch_ind)                                    
-plot(Sam,DataBuff(Sam,ch_ind + 8*i))
-                               
-xlabel('Sample')
-                                   
+plot(Sam,DataBuff(Sam,ch_ind + 8*i))                               
+xlabel('Sample')                                   
 ylabel('Amplitude')                                  
 title(['Raw data CH ' num2str(ch_ind + 8*i)])                                   
 set(gca,'FontSize',15)                                
