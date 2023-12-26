@@ -1,19 +1,21 @@
 
 
 
-for ch_ind = 1:Ch_Num
- filename=[ Path '\'  File_name '_SET' num2str(set_ind,'%03.f') 'CH' num2str(ch_ind,'%02.f') '.dat'];
 
-    while 1
-    fileID = fopen(filename); % File Open
-     if fileID~=-1
-       LoggingData=fread(fileID,'uint16');
-       DataBuff(:,ch_ind) = LoggingData(1:end);
-                            fclose all; % File ID Close
-                            break;
-                        end
-                        fclose all; % File ID Close
-                        pause(0.1);
-                    end
-                end
+for ch_ind = 1:Ch_Num
+filename=[ Path '\'  File_name '_SET' num2str(set_ind,'%03.f') 'CH' num2str(ch_ind,'%02.f') '.dat'];
+while 1
+fileID = fopen(filename); % File Open
+
+if fileID~=-1
+LoggingData=fread(fileID,'uint16');
+DataBuff(:,ch_ind) = LoggingData(1:end);
+fclose all; % File ID Close
+break;
+end
+
+fclose all; % File ID Close
+pause(0.1);
+end
+end
                 
