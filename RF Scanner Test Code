@@ -74,13 +74,19 @@ SelBigVal=ConjMult_Ant2Ant1(Pos1);
 SelBigVal_Degree=angle(SelBigVal)/pi*180;                  
 MeanAngle=mean(SelBigVal_Degree);
                     
-                    if Indi_ResultOn
-                        figure(FrameIdx);
-                        subplot(2,2,1);
-                        plot(abs(FreqAnt1)); legend('Freq of Ant1');
+                    
+if Indi_ResultOn
+
+figure(FrameIdx);
+
+subplot(2,2,1);
+
+plot(abs(FreqAnt1)); legend('Freq of Ant1');
                         
-                        subplot(2,2,2);
-                        plot(abs(FreqAnt2), 'r'); legend('Freq of Ant2');
+
+subplot(2,2,2);
+
+plot(abs(FreqAnt2), 'r'); legend('Freq of Ant2');
                         
                         subplot(2,2,3);
                         plot(angle(ConjMult_Ant2Ant1)/pi*180); legend('Phase Difference of All in Freq');
