@@ -52,6 +52,6 @@ end
 Detection = sum(TestBuf,[],"all");
 
 if Detection >= 1
-
+disp('Signal Detected')
 end
 
