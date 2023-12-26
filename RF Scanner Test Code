@@ -61,9 +61,6 @@ Ref_Ch = FT_Sig_1D;
 end 
 
 
-
-
-
 FreqAnt1 = fft(SelAnt1);
 FreqAnt2=fft(SelAnt2);
                     
