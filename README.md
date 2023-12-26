@@ -1,3 +1,3 @@
 RF Scanner Detection Program
 
-This program is consist of the RF Signal Detection
+This program has the capability to detect RF signals and estimate their angles.
