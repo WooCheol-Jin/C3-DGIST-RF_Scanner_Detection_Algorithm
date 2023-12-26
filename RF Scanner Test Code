@@ -49,5 +49,5 @@ for ch_ind = 1:16
 TestBuf(:,ch_ind) = FT_Sig_1D_Half(:,ch_ind)>DecTh;                            
 end
 
-sum(TestBuf)
+sum(TestBuf,[],"all")
 
