@@ -51,7 +51,7 @@ end
 
 Detection = sum(TestBuf,[],"all");
 
-if Detection >
+if Detection >= 1
 
 end
 
