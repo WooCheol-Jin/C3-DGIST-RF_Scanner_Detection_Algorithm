@@ -30,8 +30,7 @@ plot(Sam,DataBuff(Sam,ch_ind + 8*i))
                                
 xlabel('Sample')
                                    
-ylabel('Amplitude')
-                                  
+ylabel('Amplitude')                                  
 title(['Raw data CH ' num2str(ch_ind + 8*i)])                                   
 set(gca,'FontSize',15)                                
 end
