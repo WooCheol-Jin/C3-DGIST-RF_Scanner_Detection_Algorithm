@@ -17,8 +17,7 @@ end
 fclose all; % File ID Close
 pause(0.1);
 end
-end
-                
+end              
                            
 Sam = Sam_Num*(St_Ram_16-1)+1:Sam_Num*(St_Ram_16 + Num_Ram_16 -1);
 for i = 0:1
