@@ -105,7 +105,9 @@ end
 if Avg_ResultOn
 
 figure(200); title('Averaged Angle of Frame')
-                        hold on; plot(FrameIdx, MeanAngle, 'ro'); axis([0 FrameEnd+1 -180 180]);
-                    end
+         
+hold on; plot(FrameIdx, MeanAngle, 'ro'); axis([0 FrameEnd+1 -180 180]);
+
+end
                     
                     
