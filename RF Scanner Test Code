@@ -63,18 +63,6 @@ end
 
 
 
-            if app.FileSelection==0
-                
-                errordlg('File Not Selected');
-                
-            else
-                close all;
-                load([app.PathName app.FileName]);
-                for FrameIdx=FrameStart:FrameEnd
-                    SelAnt1 = (burstCaptures(:,1,FrameIdx));
-                    SelAnt2 = (burstCaptures(:,2,FrameIdx));
-                    FreqAnt1=fft(SelAnt1);
-                    
                     FreqAnt1 = fft(SelAnt1);
                     FreqAnt2=fft(SelAnt2);
                     
@@ -106,10 +94,3 @@ end
                     end
                     
                     
-                  end
-                
-            end
-            
-        end
-        
-
