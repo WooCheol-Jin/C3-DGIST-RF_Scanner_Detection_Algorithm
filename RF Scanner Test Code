@@ -60,3 +60,11 @@ title(['FFT CH ' num2str(ch_ind)])
 set(gca,'FontSize',15)                            
 end
 
+
+
+                            Data_RS_1D = DataBuff(Sam,ch_ind);
+                            Data_RS_Sel_1D = Data_RS_1D(21:end);
+                            FT_Sig_1D = fft(Data_RS_Sel_1D);
+                            FT_Sig_1D(1) = [];
+
+
