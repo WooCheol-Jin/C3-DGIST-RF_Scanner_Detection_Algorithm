@@ -62,8 +62,10 @@ Freq_Half = Freq(1:floor(length(Freq)/2))';
 figure
                            
 for ch_ind =1:Ch_Num
-                                subplot(4,4,ch_ind)
-                                plot(Freq_Half,abs(FT_Sig_1D_Half(:,ch_ind)))
+                              
+subplot(4,4,ch_ind)
+                             
+plot(Freq_Half,abs(FT_Sig_1D_Half(:,ch_ind)))
                                 xlabel('Frequency [Hz]')
                                 ylabel('ABS Amplitude')
                                 title(['FFT CH ' num2str(ch_ind)])
