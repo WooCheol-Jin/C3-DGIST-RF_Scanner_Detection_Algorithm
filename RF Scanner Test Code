@@ -56,5 +56,7 @@ disp('Signal Detected')
 end
 
 for ch_ind = 1:Ch_Num
+Ref_Ch = FT_Sig_1D;
+
 end 
 
