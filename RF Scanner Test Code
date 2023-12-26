@@ -63,11 +63,13 @@ end
 
 
 
-                    FreqAnt1 = fft(SelAnt1);
-                    FreqAnt2=fft(SelAnt2);
+
+FreqAnt1 = fft(SelAnt1);
+FreqAnt2=fft(SelAnt2);
                     
-                    ConjMult_Ant2Ant1=FreqAnt1.*conj(FreqAnt2);
-                    [Pos1 Pos2]=find(abs(ConjMult_Ant2Ant1)>DetTH);
+
+ConjMult_Ant2Ant1=FreqAnt1.*conj(FreqAnt2);
+[Pos1 Pos2]=find(abs(ConjMult_Ant2Ant1)>DetTH);
                     SelBigVal=ConjMult_Ant2Ant1(Pos1);
                     SelBigVal_Degree=angle(SelBigVal)/pi*180;
                     MeanAngle=mean(SelBigVal_Degree);
