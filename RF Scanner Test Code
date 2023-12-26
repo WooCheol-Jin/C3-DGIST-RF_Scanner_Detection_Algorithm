@@ -4,6 +4,7 @@ Path = pwd;
 
 for ch_ind = 1:Ch_Num
 filename=[ Path '\'  File_name '_SET' num2str(set_ind,'%03.f') 'CH' num2str(ch_ind,'%02.f') '.dat'];
+
 while 1
 fileID = fopen(filename); % File Open
 
@@ -17,6 +18,7 @@ end
 fclose all; % File ID Close
 pause(0.1);
 end
+
 end              
                            
 Sam = Sam_Num*(St_Ram_16-1)+1:Sam_Num*(St_Ram_16 + Num_Ram_16 -1);
