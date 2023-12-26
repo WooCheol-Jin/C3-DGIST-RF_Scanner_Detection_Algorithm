@@ -42,5 +42,6 @@ set(gca,'FontSize',15)
                                 
 end
 
-pause(P_time)
-                            end
+pause(P_time)                        
+end
+
