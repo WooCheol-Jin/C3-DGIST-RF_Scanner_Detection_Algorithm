@@ -55,7 +55,8 @@ if Detection >= 1
 disp('Signal Detected')
 end
 
-for ch_ind = 1:Ch_Num
+for ch_ind = 1:(Ch_Num-1)
+
 FreqAnt1 = fft(SelAnt1);
 FreqAnt2=fft(SelAnt2);
                     
