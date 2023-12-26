@@ -74,6 +74,9 @@ ylabel('ABS Amplitude')
 title(['FFT CH ' num2str(ch_ind)])
                              
 set(gca,'FontSize',15)
-                            end
-                            pause(P_time)
-                        end
+                            
+end
+
+pause(P_time)
+
+end
