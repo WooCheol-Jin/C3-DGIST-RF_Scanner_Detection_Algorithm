@@ -44,7 +44,7 @@ FT_Sig_1D = fft(Data_RS_Sel_1D);
 FT_Sig_1D(1) = [];
 end
 
-                        TestBuf = FT_Sig_1D_Half(:,1);
-                        for ch_ind = 2:16
-                            TestBuf = FT_Sig_1D_Half(:,ch_ind)>DecTh;                            
-                        end
+                      
+for ch_ind = 1:16
+TestBuf = FT_Sig_1D_Half(:,ch_ind)>DecTh;                            
+end
