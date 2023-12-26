@@ -1,3 +1,319 @@
+classdef RF_Scanner_ver3 < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure                       matlab.ui.Figure
+        GridLayout                     matlab.ui.container.GridLayout
+        LeftPanel                      matlab.ui.container.Panel
+        AntennaNumEditField            matlab.ui.control.NumericEditField
+        AntennaNumEditFieldLabel       matlab.ui.control.Label
+        IndividualFrameResultCheckBox  matlab.ui.control.CheckBox
+        AveragedFrameResultCheckBox    matlab.ui.control.CheckBox
+        FrameEndIdxEditField           matlab.ui.control.NumericEditField
+        FrameEndIdxEditFieldLabel      matlab.ui.control.Label
+        FileSelectButton               matlab.ui.control.StateButton
+        FileNameEditField_2            matlab.ui.control.EditField
+        DetTHEditField                 matlab.ui.control.NumericEditField
+        DetTHEditFieldLabel            matlab.ui.control.Label
+        FrameStartIdxEditField         matlab.ui.control.NumericEditField
+        FrameStartIdxEditFieldLabel    matlab.ui.control.Label
+        FileNameEditField              matlab.ui.control.EditField
+        FileNameEditFieldLabel         matlab.ui.control.Label
+        RunButton                      matlab.ui.control.StateButton
+        RightPanel                     matlab.ui.container.Panel
+    end
+
+    % Properties that correspond to apps with auto-reflow
+    properties (Access = private)
+        onePanelWidth = 576;
+    end
+
+
+    properties (Access = public)
+        FileSelection=0;
+        FileName=[];
+        PathName=[];
+        GlobalTest=100;
+    end
+
+
+
+    % Callbacks that handle component events
+    methods (Access = private)
+
+        % Value changed function: RunButton
+        function RunButtonValueChanged(app, event)
+            value = app.RunButton.Value;
+
+            % Variable Initialization
+            FrameStart=app.FrameStartIdxEditField.Value;
+            FrameEnd=app.FrameEndIdxEditField.Value;
+            DetTH=app.DetTHEditField.Value;
+            Indi_ResultOn=app.IndividualFrameResultCheckBox.Value;
+            Avg_ResultOn=app.AveragedFrameResultCheckBox.Value;
+            Ch_Num = app.AntennaNumEditField.Value;
+
+
+            if app.FileSelection==0
+                errordlg('File Not Selected');
+            else
+                close all;
+                load([app.PathName app.FileName]);
+                for FrameIdx=FrameStart:FrameEnd
+
+                    Detect_Result = 0;
+                    AngleBuf{(Ch_Num-1)} = [];
+
+                    for Ch_Ind = 1:(Ch_Num-1)
+
+                        SelAnt1 = (burstCaptures(:,Ch_Ind,FrameIdx));
+                        SelAnt2 = (burstCaptures(:,(Ch_Ind+1),FrameIdx));
+
+                        FreqAnt1 = fft(SelAnt1);
+                        FreqAnt2 = fft(SelAnt2);
+
+                        ConjMult_Ant2Ant1(:,Ch_Ind)=FreqAnt1.*conj(FreqAnt2);
+                        [Pos1 Pos2]=find(10*log10(abs(ConjMult_Ant2Ant1))>DetTH);
+
+                        SelBigVal=ConjMult_Ant2Ant1(Pos1);
+                        SelBigVal_Degree=angle(SelBigVal)/pi*180;
+                        MeanAngle=mean(SelBigVal_Degree);
+
+                        MeanAngle_Buf(Ch_Ind) = MeanAngle;
+
+                        if ~isempty(Pos1)
+                            Detect_Result = 1;
+                            AngleBuf{Ch_Ind} = SelBigVal_Degree;
+                            FreqIdxBuf{Ch_Ind} = Pos1;
+                        end
+
+                        if Avg_ResultOn
+                            figure(200); title('Averaged Angle of Frame')
+                            hold on; plot(FrameIdx, MeanAngle, 'ro'); axis([0 FrameEnd+1 -180 180]);
+                        end
+                    end
+                end
+
+                if Indi_ResultOn
+                    figure(FrameIdx);
+                    subplot(1,2,1);
+                    for Ch_Ind = 1:(Ch_Num-1)
+                        hold on
+                        plot(10*log10(abs(ConjMult_Ant2Ant1)));
+                    end
+                    hold off
+
+                    if Detect_Result == 1
+                        legend('Signal Detected');
+                    else
+                        legend('No Signal Detected');
+                    end
+                    title('Conjugate Multipled Signal')
+
+                    subplot(1,2,2);
+                    for Ch_Ind = 1:(Ch_Num-1)
+                        hold on
+                        if ~isempty(AngleBuf{Ch_Ind})
+                            stem(FreqIdxBuf{Ch_Ind},AngleBuf{Ch_Ind});
+                        end
+                    end
+                    hold off
+                    title('Detected Angle')
+                end
+            end
+        end
+
+        % Value changed function: FileSelectButton
+        function FileSelectButtonValueChanged(app, event)
+            value = app.FileSelectButton.Value;
+            [filename, pathname] = uigetfile('*.mat', 'Pick a TX Calibration MAT File');
+            app.FileName=filename;
+            app.PathName=pathname;
+            app.FileSelection=1;
+            app.FileNameEditField.Value=filename;
+            app.FileNameEditField_2.Value=pathname;
+
+
+        end
+
+        % Changes arrangement of the app based on UIFigure width
+        function updateAppLayout(app, event)
+            currentFigureWidth = app.UIFigure.Position(3);
+            if(currentFigureWidth <= app.onePanelWidth)
+                % Change to a 2x1 grid
+                app.GridLayout.RowHeight = {313, 313};
+                app.GridLayout.ColumnWidth = {'1x'};
+                app.RightPanel.Layout.Row = 2;
+                app.RightPanel.Layout.Column = 1;
+            else
+                % Change to a 1x2 grid
+                app.GridLayout.RowHeight = {'1x'};
+                app.GridLayout.ColumnWidth = {515, '1x'};
+                app.RightPanel.Layout.Row = 1;
+                app.RightPanel.Layout.Column = 2;
+            end
+        end
+    end
+
+    % Component initialization
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Create UIFigure and hide until all components are created
+            app.UIFigure = uifigure('Visible', 'off');
+            app.UIFigure.AutoResizeChildren = 'off';
+            app.UIFigure.Position = [100 100 617 313];
+            app.UIFigure.Name = 'MATLAB App';
+            app.UIFigure.SizeChangedFcn = createCallbackFcn(app, @updateAppLayout, true);
+
+            % Create GridLayout
+            app.GridLayout = uigridlayout(app.UIFigure);
+            app.GridLayout.ColumnWidth = {515, '1x'};
+            app.GridLayout.RowHeight = {'1x'};
+            app.GridLayout.ColumnSpacing = 0;
+            app.GridLayout.RowSpacing = 0;
+            app.GridLayout.Padding = [0 0 0 0];
+            app.GridLayout.Scrollable = 'on';
+
+            % Create LeftPanel
+            app.LeftPanel = uipanel(app.GridLayout);
+            app.LeftPanel.Layout.Row = 1;
+            app.LeftPanel.Layout.Column = 1;
+
+            % Create RunButton
+            app.RunButton = uibutton(app.LeftPanel, 'state');
+            app.RunButton.ValueChangedFcn = createCallbackFcn(app, @RunButtonValueChanged, true);
+            app.RunButton.Text = 'Run';
+            app.RunButton.Position = [365 16 100 22];
+
+            % Create FileNameEditFieldLabel
+            app.FileNameEditFieldLabel = uilabel(app.LeftPanel);
+            app.FileNameEditFieldLabel.BackgroundColor = [0.502 0.502 0.502];
+            app.FileNameEditFieldLabel.HorizontalAlignment = 'right';
+            app.FileNameEditFieldLabel.Position = [20 265 60 22];
+            app.FileNameEditFieldLabel.Text = 'File Name';
+
+            % Create FileNameEditField
+            app.FileNameEditField = uieditfield(app.LeftPanel, 'text');
+            app.FileNameEditField.Editable = 'off';
+            app.FileNameEditField.BackgroundColor = [0.502 0.502 0.502];
+            app.FileNameEditField.Position = [95 269 123 18];
+            app.FileNameEditField.Value = 'No File Selected';
+
+            % Create FrameStartIdxEditFieldLabel
+            app.FrameStartIdxEditFieldLabel = uilabel(app.LeftPanel);
+            app.FrameStartIdxEditFieldLabel.HorizontalAlignment = 'right';
+            app.FrameStartIdxEditFieldLabel.Position = [21 202 88 22];
+            app.FrameStartIdxEditFieldLabel.Text = 'Frame Start Idx';
+
+            % Create FrameStartIdxEditField
+            app.FrameStartIdxEditField = uieditfield(app.LeftPanel, 'numeric');
+            app.FrameStartIdxEditField.Position = [124 202 42 22];
+            app.FrameStartIdxEditField.Value = 1;
+
+            % Create DetTHEditFieldLabel
+            app.DetTHEditFieldLabel = uilabel(app.LeftPanel);
+            app.DetTHEditFieldLabel.HorizontalAlignment = 'right';
+            app.DetTHEditFieldLabel.Position = [25 128 43 22];
+            app.DetTHEditFieldLabel.Text = 'Det TH';
+
+            % Create DetTHEditField
+            app.DetTHEditField = uieditfield(app.LeftPanel, 'numeric');
+            app.DetTHEditField.Position = [83 128 83 22];
+            app.DetTHEditField.Value = 110;
+
+            % Create FileNameEditField_2
+            app.FileNameEditField_2 = uieditfield(app.LeftPanel, 'text');
+            app.FileNameEditField_2.Editable = 'off';
+            app.FileNameEditField_2.BackgroundColor = [0.8 0.8 0.8];
+            app.FileNameEditField_2.Position = [114 238 323 18];
+            app.FileNameEditField_2.Value = 'No Folder Select';
+
+            % Create FileSelectButton
+            app.FileSelectButton = uibutton(app.LeftPanel, 'state');
+            app.FileSelectButton.ValueChangedFcn = createCallbackFcn(app, @FileSelectButtonValueChanged, true);
+            app.FileSelectButton.Text = 'File Select';
+            app.FileSelectButton.Position = [20 236 89 22];
+
+            % Create FrameEndIdxEditFieldLabel
+            app.FrameEndIdxEditFieldLabel = uilabel(app.LeftPanel);
+            app.FrameEndIdxEditFieldLabel.HorizontalAlignment = 'right';
+            app.FrameEndIdxEditFieldLabel.Position = [232 202 84 22];
+            app.FrameEndIdxEditFieldLabel.Text = 'Frame End Idx';
+
+            % Create FrameEndIdxEditField
+            app.FrameEndIdxEditField = uieditfield(app.LeftPanel, 'numeric');
+            app.FrameEndIdxEditField.Position = [331 202 42 22];
+            app.FrameEndIdxEditField.Value = 10;
+
+            % Create AveragedFrameResultCheckBox
+            app.AveragedFrameResultCheckBox = uicheckbox(app.LeftPanel);
+            app.AveragedFrameResultCheckBox.Text = 'Averaged Frame Result';
+            app.AveragedFrameResultCheckBox.Position = [25 45 148 22];
+            app.AveragedFrameResultCheckBox.Value = true;
+
+            % Create IndividualFrameResultCheckBox
+            app.IndividualFrameResultCheckBox = uicheckbox(app.LeftPanel);
+            app.IndividualFrameResultCheckBox.Text = 'Individual Frame Result';
+            app.IndividualFrameResultCheckBox.Position = [25 15 148 22];
+            app.IndividualFrameResultCheckBox.Value = true;
+
+            % Create AntennaNumEditFieldLabel
+            app.AntennaNumEditFieldLabel = uilabel(app.LeftPanel);
+            app.AntennaNumEditFieldLabel.HorizontalAlignment = 'right';
+            app.AntennaNumEditFieldLabel.Position = [21 167 79 22];
+            app.AntennaNumEditFieldLabel.Text = 'Antenna Num';
+
+            % Create AntennaNumEditField
+            app.AntennaNumEditField = uieditfield(app.LeftPanel, 'numeric');
+            app.AntennaNumEditField.Position = [126 167 42 22];
+            app.AntennaNumEditField.Value = 2;
+
+            % Create RightPanel
+            app.RightPanel = uipanel(app.GridLayout);
+            app.RightPanel.Layout.Row = 1;
+            app.RightPanel.Layout.Column = 2;
+
+            % Show the figure after all components are created
+            app.UIFigure.Visible = 'on';
+        end
+    end
+
+    % App creation and deletion
+    methods (Access = public)
+
+        % Construct app
+        function app = RF_Scanner_ver3
+
+            % Create UIFigure and components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Path = pwd;
 
 for ch_ind = 1:Ch_Num
@@ -80,6 +396,6 @@ end
 
 end 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                     
                     
