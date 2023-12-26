@@ -23,13 +23,9 @@ end
 Sam = Sam_Num*(St_Ram_16-1)+1:Sam_Num*(St_Ram_16 + Num_Ram_16 -1);
 
 for i = 0:1
-
-figure
-                                
-for ch_ind =1:Ch_Num/2
-                                    
-subplot(2,4,ch_ind)
-                                    
+figure                              
+for ch_ind =1:Ch_Num/2                                   
+subplot(2,4,ch_ind)                                    
 plot(Sam,DataBuff(Sam,ch_ind + 8*i))
                                
 xlabel('Sample')
