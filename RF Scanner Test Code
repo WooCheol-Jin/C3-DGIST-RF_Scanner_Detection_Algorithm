@@ -63,7 +63,7 @@ ConjMult_Ant2Ant1=FreqAnt1.*conj(FreqAnt2);
 [Pos1 Pos2]=find(abs(ConjMult_Ant2Ant1)>DetTH);                   
 SelBigVal=ConjMult_Ant2Ant1(Pos1);
 SelBigVal_Degree=angle(SelBigVal)/pi*180;                  
-MeanAngle=mean(SelBigVal_Degree);
+MeanAngle(ch_ind) = mean(SelBigVal_Degree);
                                        
 if Indi_ResultOn
 figure(FrameIdx);
