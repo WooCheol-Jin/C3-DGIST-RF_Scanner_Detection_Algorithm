@@ -48,8 +48,10 @@ Data_RS_Sel_1D = Data_RS_1D(21:end);
 FT_Sig_1D = fft(Data_RS_Sel_1D);
                               
 FT_Sig_1D(1) = [];
-                                FT_Sig_1D_Half(:,ch_ind) = FT_Sig_1D(1:floor(length(FT_Sig_1D)/2));
-                            end
+                              
+FT_Sig_1D_Half(:,ch_ind) = FT_Sig_1D(1:floor(length(FT_Sig_1D)/2));
+                           
+end
                             Freq = (1:length(Data_RS_Sel_1D))/length(Data_RS_Sel_1D)*20e6;
                             Freq(1) = [];
                             Freq_Half = Freq(1:floor(length(Freq)/2))';
